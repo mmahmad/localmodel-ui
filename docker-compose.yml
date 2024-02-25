@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  ollama:
+    image: ollama/ollama:latest
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      ollama pull mistral &&
+      OLLAMA_HOST=0.0.0.0:11434 ollama serve
+    ports:
+      - "11434:11434"
+
+  app:
+    build: .
+    ports:
+      - "7860:7860"
+    environment:
+      - MODEL_NAME=mistral
+    depends_on:
+      - ollama
+
+# version: '3.8'
+# services:
+#   ollama:
+#     image: ollama/ollama:latest
+#     environment:
+#       - OLLAMA_HOST=0.0.0.0:11434
+#     command: serve
+#     ports:
+#       - "11434:11434"
+
+#   app:
+#     build: .
+#     ports:
+#       - "7860:7860"
+#     environment:
+#       - MODEL_NAME=mistral
+#     depends_on:
+#       - ollama
+
+# version: '3.8'
+# services:
+#   ollama:
+#     image: ollama/ollama:latest
+#     command: serve -p 11435
+#     ports:
+#       - "11435:11435"
+
+#   app:
+#     build: .
+#     ports:
+#       - "7860:7860"
+#     environment:
+#       - MODEL_NAME=mistral
+#     depends_on:
+#       - ollama
+
+# version: '3.8'
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "7860:7860"
+#     environment:
+#       - MODEL_NAME=mistral
